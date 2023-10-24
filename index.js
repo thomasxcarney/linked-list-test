@@ -23,13 +23,13 @@ const LinkedList = function LinkedList(){
     function prepend(value) {
         const newNode = Node();
         newNode.value = value;
-        if(size == 0) {
+        if(this.size == 0) {
             this.head = newNode;
             this.tail = newNode;
             this.size++;
         } else {
+            newNode.next = this.head;
             newNode.nextNode = this.head;
-            this.tail = this.head;
             this.head = newNode;
             this.size++;
         };
@@ -74,16 +74,37 @@ const LinkedList = function LinkedList(){
     function toString() {
         let current = this.head.next;
         let string = ('( ' + this.head.value + ' )')
-        for(let i = 1; i < this.size+1; i++){
+        for(let i = 1; i < this.size; i++){
             if(current){
                 string += (' -> ( ' + current.value + ' )');
                 current = current.next;
-            } else string += '-> null';
+            };
         };
+        string += '-> null';
         return string;
     };
+    function insertAt(value, index) {
+        let current = this.head;
+        for(let counter = 0; counter < index-1; counter++){
+            current = current.next;
+        };
+        const newNode = Node();
+        newNode.value = value;
+        newNode.next = current.next;
+        newNode.nextNode = current.next;
+        current.next = newNode;
+        this.size++;
+    };
+    function removeAt(index) {
+        let current = this.head;
+        for(let counter = 0; counter < index-1; counter++){
+            current = current.next;
+        };
+        current.next = current.next.next;
+        this.size--;
+    };
     return {
-        head, tail, size, append, prepend, at, pop, contains, find, toString
+        head, tail, size, append, prepend, at, pop, contains, find, toString, insertAt, removeAt
     };
 };
 
@@ -98,5 +119,9 @@ function Node() {
 const myList = LinkedList();
 myList.append('1');
 myList.append('2');
-myList.append('3');
+myList.prepend('3');
+console.log(myList.toString())
+myList.insertAt('4', 3)
+console.log(myList.toString())
+myList.removeAt('1');
 console.log(myList.toString())
